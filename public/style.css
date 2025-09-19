@@ -1,88 +1,65 @@
-:root { --bar-h: 64px; }
+:root { --bar-h: 64px; --switcher-h: 52px; }
 
-body {
-  margin: 0;
-  background: linear-gradient(to bottom, #0b1d3a, #000);
-  color: #fff;
-  font-family: system-ui, -apple-system, sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
+body{
+  margin:0;
+  background: linear-gradient(#0b1d3a, #000);
+  color:#fff; font-family: system-ui, -apple-system, sans-serif;
+  /* 入力バー + 切替バー + セーフエリア分の余白 */
+  padding-bottom: calc(var(--bar-h) + var(--switcher-h) + env(safe-area-inset-bottom, 0px));
+  min-height:100vh; overflow-x:hidden;
 }
 
-header {
-  padding: 16px;
-  font-weight: bold;
-  font-size: 22px;
-  text-align: center;
+/* プレイグラウンドは残りの高さに自動で収まるだけでOK */
+#playground{ position:relative; min-height: 40vh; }
+
+/* ▼ テーマ切替バー（固定配置・最前面） */
+#theme-switcher{
+  position: fixed;
+  left: 0; right: 0;
+  bottom: calc(var(--bar-h) + 6px);
+  z-index: 1000;
+  display:flex; justify-content:center; gap:8px;
+  padding:8px 12px;
+  backdrop-filter: blur(8px);
+  background: rgba(10,10,20,.35);
+  border-top: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(0,0,0,.3);
+  border-radius: 12px;
+  width: min(520px, 92%);
+  margin: 0 auto;
 }
 
-/* playground は上下に余白を確保 */
-#playground {
-  position: relative;
-  height: calc(100vh - (64px + 50px + var(--bar-h))); 
-  /* 64px=header, 50px=theme, var(--bar-h)=form */
-  overflow: hidden;
+#theme-switcher button{
+  width:44px; height:36px;
+  font-size:20px; line-height:1;
+  border-radius:10px; border:1px solid rgba(255,255,255,.2);
+  background:#162037; color:#fff;
 }
 
-#theme-switcher {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px;
-  background: #111;
-  border-top: 1px solid #333;
-  border-bottom: 1px solid #333;
+/* 入力フォームは最下部に固定 */
+form{
+  position: fixed; left:0; right:0; bottom:0;
+  display:flex; gap:8px; align-items:center;
+  height: var(--bar-h); padding:8px 12px;
+  background:#0d0f18; border-top:1px solid #333;
+  z-index: 999;
 }
 
-#theme-switcher button {
-  flex: 1;
-  max-width: 90px;
-  padding: 8px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  background: #222;
-  color: #fff;
+input{
+  flex:1; height:48px; padding:0 14px; font-size:18px;
+  border:1px solid #333; border-radius:12px; background:#fff; color:#000;
 }
+button{ height:48px; min-width:56px; padding:0 16px; font-size:20px;
+  border:0; border-radius:12px; background:#3a3f5c; color:#fff; }
 
-.msg {
-  position: absolute;
-  font-weight: 700;
-  font-size: 22px;
-  pointer-events: none;
+/* 飛び出すメッセージは切替バー/入力欄と被らないよう安全域を確保 */
+.msg{
+  position:absolute; font-weight:700; font-size:22px; pointer-events:none;
   transition: all 5s ease-out;
 }
 
-form {
-  position: fixed;
-  left: 0; right: 0; bottom: 0;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  height: var(--bar-h);
-  padding: 8px;
-  background: #111;
-  border-top: 1px solid #333;
-}
-
-input {
-  flex: 1;
-  height: 48px;
-  padding: 0 14px;
-  font-size: 18px;
-  border: 1px solid #333;
-  border-radius: 12px;
-  background: #fff;
-  color: #000;
-}
-
-button {
-  height: 48px;
-  min-width: 56px;
-  padding: 0 16px;
-  font-size: 20px;
-  border: 0;
-  border-radius: 12px;
-  background: #444;
-  color: #fff;
+/* PC少し調整 */
+@media (min-width: 600px){
+  :root{ --bar-h:56px; --switcher-h:52px; }
+  .msg{ font-size:26px; }
 }
