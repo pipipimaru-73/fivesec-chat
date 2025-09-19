@@ -9,10 +9,19 @@
 <body>
   <header>FiveSec Chat - 5秒で消える投稿</header>
 
+  <!-- テーマ切り替えボタン -->
+  <div id="theme-switcher">
+    <button onclick="setTheme('normal')">🌍 ノーマル</button>
+    <button onclick="setTheme('aquarium')">🐠 水族館</button>
+    <button onclick="setTheme('jungle')">🌴 ジャングル</button>
+    <button onclick="setTheme('starry')">🌌 星空</button>
+  </div>
+
   <div id="feed"></div>
 
+  <!-- 入力フォーム -->
   <form id="f">
-    <input id="inp" placeholder="ここに入力（140字まで）" maxlength="140"
+    <input id="inp" placeholder="ここに入力（30字まで）" maxlength="30"
            inputmode="text" enterkeyhint="send" />
     <button aria-label="送信">📩</button>
   </form>
