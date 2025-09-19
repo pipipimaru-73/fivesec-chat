@@ -1,0 +1,36 @@
+:root { --bar-h: 64px; }
+
+body{
+  margin:0; background:#fff; color:#000;
+  font-family: system-ui, -apple-system, sans-serif;
+  padding-bottom: var(--bar-h);
+}
+header{ padding:16px; font-weight:700; }
+
+.msg{
+  position:fixed; font-weight:700; font-size:20px;
+  pointer-events:none; transition: all 5s ease-out;
+}
+
+form{
+  position:fixed; left:0; right:0; bottom:0;
+  display:flex; gap:8px; align-items:center;
+  height:var(--bar-h); padding:8px 12px;
+  background:#f5f5f5; border-top:1px solid #ddd;
+}
+input{
+  flex:1; height:48px; padding:0 14px; font-size:18px;
+  border:1px solid #ccc; border-radius:12px; background:#fff; color:#000;
+}
+button{
+  height:48px; min-width:56px; padding:0 16px;
+  font-size:20px; line-height:1; border:0; border-radius:12px;
+  background:#000; color:#fff;
+}
+
+@media (min-width:600px){
+  :root { --bar-h:56px; }
+  .msg{ font-size:24px; }
+  input{ height:44px; font-size:16px; }
+  button{ height:44px; font-size:16px; min-width:80px; }
+}
