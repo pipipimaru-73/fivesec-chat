@@ -1,7 +1,15 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FiveSec Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
   <header>FiveSec Chat - 5秒で消える投稿</header>
 
-  <!-- 出していい範囲 -->
+  <!-- 絵文字や文字を出す遊び場 -->
   <div id="playground">
     <div id="feed"></div>
   </div>
@@ -14,7 +22,7 @@
     <button onclick="setTheme('star')"> 🌌 </button>
   </div>
 
-  <!-- 入力フォーム -->
+  <!-- 入力フォーム（真下固定） -->
   <form id="f">
     <input id="inp" placeholder="ここに入力（30字まで）" maxlength="30"
            inputmode="text" enterkeyhint="send" />
@@ -23,3 +31,4 @@
 
   <script src="script.js"></script>
 </body>
+</html>

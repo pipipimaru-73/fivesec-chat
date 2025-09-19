@@ -2,16 +2,13 @@
 
 body {
   margin: 0;
-  background: #0b1d3a; /* デフォルト: ネイビー */
-  background: linear-gradient(to bottom, #0b1d3a, #000); /* 星っぽい深み */
+  background: linear-gradient(to bottom, #0b1d3a, #000);
   color: #fff;
   font-family: system-ui, -apple-system, sans-serif;
-  padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* ヘッダー */
 header {
   padding: 16px;
   font-weight: bold;
@@ -19,31 +16,43 @@ header {
   text-align: center;
 }
 
-/* 切り替えボタン */
-#theme-switcher {
-  text-align: center;
-  margin: 10px 0;
+/* playground は上下に余白を確保 */
+#playground {
+  position: relative;
+  height: calc(100vh - (64px + 50px + var(--bar-h))); 
+  /* 64px=header, 50px=theme, var(--bar-h)=form */
+  overflow: hidden;
 }
+
+#theme-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  background: #111;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+}
+
 #theme-switcher button {
-  margin: 0 5px;
-  padding: 6px 12px;
+  flex: 1;
+  max-width: 90px;
+  padding: 8px;
+  font-size: 16px;
   border-radius: 8px;
   border: none;
   background: #222;
   color: #fff;
-  font-size: 14px;
 }
 
-/* 浮いて消えるメッセージ */
 .msg {
-  position: fixed;
+  position: absolute;
   font-weight: 700;
   font-size: 22px;
   pointer-events: none;
   transition: all 5s ease-out;
 }
 
-/* 入力フォーム */
 form {
   position: fixed;
   left: 0; right: 0; bottom: 0;
@@ -72,53 +81,8 @@ button {
   min-width: 56px;
   padding: 0 16px;
   font-size: 20px;
-  line-height: 1;
   border: 0;
   border-radius: 12px;
   background: #444;
   color: #fff;
 }
-
-/* PC */
-@media (min-width: 600px) {
-  .msg { font-size: 28px; }
-  input { height: 44px; font-size: 16px; }
-  button { height: 44px; font-size: 16px; min-width: 80px; }
-}
-/* ▼ テーマ切り替えボタンエリア */
-#theme-switcher {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px;
-  background: #f0f0f0;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-}
-
-#theme-switcher button {
-  flex: 1;
-  max-width: 90px;
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: #fff;
-}
-/* 遊び場エリア */
-#playground {
-  position: relative;
-  flex: 1;
-  height: calc(100vh - 160px); /* ヘッダー + 切替 + 入力フォーム分を除く */
-  overflow: hidden;
-  background: #fff; /* デフォ背景 */
-}
-
-.msg {
-  position: absolute; /* playground内で配置 */
-  font-weight: 700;
-  font-size: 20px;
-  pointer-events: none;
-  transition: all 5s ease-out;
-}
-
