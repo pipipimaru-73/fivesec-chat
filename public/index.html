@@ -1,13 +1,18 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FiveSec Chat</title>
+  <!-- これを必ず入れる！ -->
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <!-- ヘッダー -->
   <header>FiveSec Chat - 5秒で消える投稿</header>
 
-  <!-- 絵文字や投稿が流れるエリア -->
   <main id="playground">
     <div id="feed"></div>
   </main>
 
-  <!-- チャット欄のすぐ上にテーマ切替 -->
+  <!-- チャット欄の“真上”に固定配置 -->
   <nav id="theme-switcher" aria-label="テーマ切替">
     <button type="button" onclick="setTheme('normal')"   title="ノーマル">🌍</button>
     <button type="button" onclick="setTheme('aquarium')" title="水族館">🐠</button>
@@ -15,13 +20,11 @@
     <button type="button" onclick="setTheme('star')"     title="星空">🌌</button>
   </nav>
 
-  <!-- 入力フォーム -->
   <form id="f">
     <input id="inp" placeholder="ここに入力（30字まで）" maxlength="30"
            inputmode="text" enterkeyhint="send" />
     <button type="submit" aria-label="送信">📩</button>
   </form>
 
-  <!-- スクリプト -->
   <script src="script.js"></script>
 </body>
