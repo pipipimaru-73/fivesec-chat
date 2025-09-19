@@ -1,18 +1,21 @@
+<!doctype html>
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FiveSec Chat</title>
-  <!-- これを必ず入れる！ -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=rev10">
 </head>
 <body>
+  <!-- 上部固定ヘッダー -->
   <header>FiveSec Chat - 5秒で消える投稿</header>
 
-  <main id="playground">
-    <div id="feed"></div>
+  <!-- 真ん中の“遊び場”だけに絵文字/投稿を出す -->
+  <main id="playground" aria-label="表示エリア">
+    <div id="feed" aria-hidden="true"></div>
   </main>
 
-  <!-- チャット欄の“真上”に固定配置 -->
+  <!-- 入力欄の直上に固定 -->
   <nav id="theme-switcher" aria-label="テーマ切替">
     <button type="button" onclick="setTheme('normal')"   title="ノーマル">🌍</button>
     <button type="button" onclick="setTheme('aquarium')" title="水族館">🐠</button>
@@ -20,11 +23,13 @@
     <button type="button" onclick="setTheme('star')"     title="星空">🌌</button>
   </nav>
 
-  <form id="f">
+  <!-- 最下部固定の入力フォーム -->
+  <form id="f" autocomplete="off">
     <input id="inp" placeholder="ここに入力（30字まで）" maxlength="30"
-           inputmode="text" enterkeyhint="send" />
+           inputmode="text" enterkeyhint="send" aria-label="メッセージ入力" />
     <button type="submit" aria-label="送信">📩</button>
   </form>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=rev10"></script>
 </body>
+</html>

@@ -12,23 +12,22 @@ const themes = {
 };
 let currentTheme = "normal";
 
-// DOM 参照
+// DOM
 const playground = document.getElementById("playground");
-const f          = document.getElementById("f");
-const inp        = document.getElementById("inp");
+const form       = document.getElementById("f");
+const inputEl    = document.getElementById("inp");
 
-// ===== playground 内の安全なランダム位置 =====
+// ===== playground 内の安全ランダム座標 =====
 function randomPosInPlayground() {
-  // 内側マージン（枠にかぶらないように）
-  const m = 12;
+  const margin = 12;                 // 内側マージン
   const w = playground.clientWidth;
   const h = playground.clientHeight;
-  const x = Math.random() * Math.max(0, w - 60 - m * 2) + m;
-  const y = Math.random() * Math.max(0, h - 60 - m * 2) + m;
+  const x = Math.random() * Math.max(0, w - 60 - margin * 2) + margin;
+  const y = Math.random() * Math.max(0, h - 60 - margin * 2) + margin;
   return { x, y };
 }
 
-// ===== メッセージ/絵文字 生成（playgroundの中だけ） =====
+// ===== 1つだけの spawnMessage（上書きなし） =====
 function spawnMessage(text) {
   const el = document.createElement("div");
   el.className = "msg";
@@ -40,56 +39,59 @@ function spawnMessage(text) {
 
   playground.appendChild(el);
 
-  // ふわっと→縮小フェード
+  // ふわっと出てから縮小＆フェード
   requestAnimationFrame(() => {
     el.style.transform = "scale(1)";
     setTimeout(() => {
       el.style.transform = "scale(0.2)";
       el.style.opacity = "0";
+      el.style.color = "#888";
     }, 120);
   });
 
-  // 5秒で消える
+  // 5秒後に消滅
   setTimeout(() => el.remove(), 5000);
 }
 
+// ===== ランダム絵文字 =====
 function spawnEmoji() {
-  const pool  = themes[currentTheme];
-  const emoji = pool[Math.floor(Math.random() * pool.length)];
-  spawnMessage(emoji);
+  const pool = themes[currentTheme];
+  spawnMessage(pool[Math.floor(Math.random() * pool.length)]);
 }
 
-// ===== 常時3匹キープ（不足分のみ補充） =====
+// ===== 常に3〜4匹キープ（不足分のみ補充、じわじわ増える） =====
 setInterval(() => {
   const alive = playground.querySelectorAll(".msg").length;
-  if (alive < 3) spawnEmoji();
+  if (alive < 3) spawnEmoji();            // 最低3
+  if (alive >= 3 && alive < 4 && Math.random() < 0.3) spawnEmoji(); // たまに4
 }, 900);
 
-// ===== WebSocket 受信 =====
+// ===== 受信メッセージも playground 内に表示 =====
 ws.onmessage = (ev) => {
   const { t } = JSON.parse(ev.data);
   spawnMessage(t);
 };
 
-// ===== 送信 =====
-f.addEventListener("submit", (e) => {
+// ===== 送信処理 =====
+form.addEventListener("submit", (e) => {
   e.preventDefault();
-  const text = inp.value.trim();
+  const text = inputEl.value.trim();
   if (!text) return;
 
   try {
     ws.send(JSON.stringify({ text }));
   } catch {
+    // WSが使えない時の保険
     fetch("/api/post", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ text })
     });
   }
-  inp.value = "";
+  inputEl.value = "";
 });
 
-// ===== テーマ切替（グローバル公開；HTMLの onclick 用） =====
+// ===== テーマ切替（HTMLのonclick用に公開） =====
 window.setTheme = (name) => {
   currentTheme = name;
 };

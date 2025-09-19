@@ -1,62 +1,101 @@
-:root { --bar-h: 64px; --switcher-h: 48px; }
+:root{
+  --header-h:   56px;  /* ヘッダーの高さ */
+  --switcher-h: 52px;  /* テーマ切替バーの高さ */
+  --bar-h:      64px;  /* 入力バーの高さ */
+}
 
-html, body { height: 100%; }
-
-body{
-  margin:0; color:#fff; font-family:system-ui,-apple-system,sans-serif;
+/* ページ全体は固定。スクロール禁止 */
+html, body{
+  height:100%;
+  margin:0;
+  overflow:hidden; /* ← スクロールなし */
+  color:#fff;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
   background: linear-gradient(#0b1d3a, #000);
-  /* 下部に: スイッチャ + 入力バー のぶんだけ余白 */
-  padding-bottom: calc(var(--bar-h) + var(--switcher-h));
-  overflow-x:hidden;
 }
 
-/* ヘッダー */
-header{ padding:16px; font-weight:700; font-size:22px; text-align:center; }
+/* ❶ ヘッダー（最上部固定） */
+header{
+  position: fixed;
+  top:0; left:0; right:0;
+  height: var(--header-h);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:22px;
+  z-index: 1002;
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
 
-/* 絵文字や文字が舞うエリア（下に被らないよう余白） */
+/* ❷ 遊び場（上下固定UIに挟まれた領域） */
 #playground{
-  position:relative;
-  height: calc(100vh - 16px - var(--bar-h) - var(--switcher-h));
-  overflow:hidden;
+  position: fixed;
+  top: var(--header-h);
+  left: 0; right: 0;
+  bottom: calc(var(--switcher-h) + var(--bar-h));
+  overflow: hidden;    /* ← この中だけに出す */
 }
 
-/* チャットのすぐ上に固定 */
+/* ❸ テーマ切替（入力欄のすぐ上に固定） */
 #theme-switcher{
-  position:fixed; left:0; right:0; bottom:var(--bar-h);
-  display:flex; gap:8px; justify-content:center;
+  position: fixed;
+  left: 0; right: 0;
+  bottom: var(--bar-h);
+  z-index: 1001;
+  display:flex; gap:8px; justify-content:center; align-items:center;
+  width: min(520px, 92%); margin: 0 auto;
   height: var(--switcher-h);
-  padding:8px; background:#0f1730cc; backdrop-filter: blur(6px);
-  border-top:1px solid #233;
-  z-index: 50;
+  padding: 8px 12px;
+  backdrop-filter: blur(8px);
+  background: rgba(10,14,30,.35);
+  border-top: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(0,0,0,.35);
+  border-radius: 12px;
 }
 #theme-switcher button{
-  min-width:44px; height:32px; border-radius:8px; border:1px solid #345;
-  background:#1b294d; color:#fff; font-size:16px;
+  width:44px; height:36px;
+  font-size:20px; line-height:1;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.2);
+  background:#162037; color:#fff;
+  cursor:pointer;
 }
 
-/* 入力バー（最下部固定） */
+/* ❹ 入力フォーム（最下部固定） */
 form{
-  position:fixed; left:0; right:0; bottom:0; z-index:60;
+  position: fixed;
+  left:0; right:0; bottom:0;
+  z-index: 1000;
+  height: var(--bar-h);
   display:flex; gap:8px; align-items:center;
-  height:var(--bar-h); padding:8px; background:#0d1326; border-top:1px solid #223;
+  padding: 8px 12px;
+  background:#0d0f18;
+  border-top:1px solid #333;
 }
 input{
-  flex:1; height:48px; padding:0 14px; font-size:18px;
-  border:1px solid #334; border-radius:12px; background:#fff; color:#000;
+  flex:1; height:48px; padding:0 14px;
+  font-size:18px;
+  border:1px solid #334; border-radius:12px;
+  background:#fff; color:#000;
 }
 button{
-  height:48px; min-width:56px; padding:0 16px; font-size:20px; border:0;
-  border-radius:12px; background:#3a4a8a; color:#fff;
+  height:48px; min-width:56px; padding:0 16px;
+  font-size:20px; line-height:1;
+  border:0; border-radius:12px;
+  background:#3a4a8a; color:#fff;
+  cursor:pointer;
 }
 
-/* 舞う要素（playground内に絶対配置） */
+/* 遊び場に出す要素 */
 .msg{
-  position:absolute; font-weight:700; font-size:22px; pointer-events:none;
+  position:absolute; /* playground内で絶対配置 */
+  font-weight:700; font-size:22px;
+  pointer-events:none;
+  will-change: transform, opacity;
   transition: transform 5s ease-out, opacity 5s ease-out, color 5s ease-out;
 }
 
 /* PC少し大きめ */
-@media (min-width:600px){
+@media (min-width: 600px){
+  :root{ --header-h:60px; --bar-h:56px; }
   header{ font-size:24px; }
-  .msg{ font-size:28px; }
+  .msg{ font-size:26px; }
 }
