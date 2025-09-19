@@ -9,15 +9,16 @@
 <body>
   <header>FiveSec Chat - 5秒で消える投稿</header>
 
-  <!-- テーマ切り替えボタン（入力欄の上に設置） -->
+  <!-- フィード -->
+  <div id="feed"></div>
+
+  <!-- テーマ切り替えをチャット入力のすぐ上に配置 -->
   <div id="theme-switcher">
     <button onclick="setTheme('normal')">🌍 ノーマル</button>
     <button onclick="setTheme('aquarium')">🐠 水族館</button>
     <button onclick="setTheme('jungle')">🌴 ジャングル</button>
     <button onclick="setTheme('starry')">🌌 星空</button>
   </div>
-
-  <div id="feed"></div>
 
   <!-- 入力フォーム -->
   <form id="f">
