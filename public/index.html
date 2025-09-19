@@ -1,23 +1,17 @@
-<!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FiveSec Chat</title>
-  <link rel="stylesheet" href="style.css">
-</head>
 <body>
   <header>FiveSec Chat - 5秒で消える投稿</header>
 
-  <!-- フィード -->
-  <div id="feed"></div>
+  <!-- 出していい範囲 -->
+  <div id="playground">
+    <div id="feed"></div>
+  </div>
 
-  <!-- テーマ切り替えをチャット入力のすぐ上に配置 -->
+  <!-- ▼ チャット欄のすぐ上にテーマ切り替え -->
   <div id="theme-switcher">
-    <button onclick="setTheme('normal')">🌍 </button>
-    <button onclick="setTheme('aquarium')">🐠 </button>
-    <button onclick="setTheme('jungle')">🌴 </button>
-    <button onclick="setTheme('starry')">🌌 </button>
+    <button onclick="setTheme('normal')"> 🌍 </button>
+    <button onclick="setTheme('aquarium')"> 🐠 </button>
+    <button onclick="setTheme('jungle')"> 🌴 </button>
+    <button onclick="setTheme('star')"> 🌌 </button>
   </div>
 
   <!-- 入力フォーム -->
@@ -29,4 +23,3 @@
 
   <script src="script.js"></script>
 </body>
-</html>
