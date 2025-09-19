@@ -1,65 +1,88 @@
-:root { --bar-h: 64px; --switcher-h: 52px; }
+:root{
+  --bar-h: 64px;        /* 入力バーの高さ */
+  --switcher-h: 52px;   /* テーマ切替バーの高さ */
+  --header-h: 56px;     /* ヘッダーの高さ */
+}
 
+/* 背景と基本 */
 body{
   margin:0;
   background: linear-gradient(#0b1d3a, #000);
   color:#fff; font-family: system-ui, -apple-system, sans-serif;
-  /* 入力バー + 切替バー + セーフエリア分の余白 */
-  padding-bottom: calc(var(--bar-h) + var(--switcher-h) + env(safe-area-inset-bottom, 0px));
-  min-height:100vh; overflow-x:hidden;
+  /* ヘッダー分の上余白を確保（iOSのアドレスバー対策にもなる） */
+  padding-top: var(--header-h);
+  /* 下は switcher + 入力バー分を確保（実体は固定配置だが念のため） */
+  padding-bottom: calc(var(--switcher-h) + var(--bar-h));
+  min-height:100vh; overflow:hidden;
 }
 
-/* プレイグラウンドは残りの高さに自動で収まるだけでOK */
-#playground{ position:relative; min-height: 40vh; }
+/* ❶ ヘッダーを最上部に固定 */
+header{
+  position: fixed; top:0; left:0; right:0;
+  height: var(--header-h);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:22px;
+  z-index: 1002;
+}
 
-/* ▼ テーマ切替バー（固定配置・最前面） */
+/* ❷ プレイグラウンドは“上下に挟み込まれた固定領域” */
+#playground{
+  position: fixed;
+  top: var(--header-h);
+  left: 0; right: 0;
+  bottom: calc(var(--switcher-h) + var(--bar-h));
+  overflow: hidden;
+  /* 装飾したければここに */
+}
+
+/* ❸ テーマ切替（入力欄の“すぐ上”に固定） */
 #theme-switcher{
   position: fixed;
   left: 0; right: 0;
-  bottom: calc(var(--bar-h) + 6px);
-  z-index: 1000;
+  bottom: var(--bar-h);
+  z-index: 1001;
   display:flex; justify-content:center; gap:8px;
+  width: min(520px, 92%); margin:0 auto;
   padding:8px 12px;
   backdrop-filter: blur(8px);
   background: rgba(10,10,20,.35);
-  border-top: 1px solid rgba(255,255,255,.08);
-  border-bottom: 1px solid rgba(0,0,0,.3);
-  border-radius: 12px;
-  width: min(520px, 92%);
-  margin: 0 auto;
+  border-top:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid rgba(0,0,0,.3);
+  border-radius:12px;
 }
-
 #theme-switcher button{
-  width:44px; height:36px;
-  font-size:20px; line-height:1;
+  width:44px; height:36px; font-size:20px; line-height:1;
   border-radius:10px; border:1px solid rgba(255,255,255,.2);
   background:#162037; color:#fff;
 }
 
-/* 入力フォームは最下部に固定 */
+/* ❹ 入力バー（最下部固定） */
 form{
   position: fixed; left:0; right:0; bottom:0;
+  height: var(--bar-h);
   display:flex; gap:8px; align-items:center;
-  height: var(--bar-h); padding:8px 12px;
+  padding:8px 12px;
   background:#0d0f18; border-top:1px solid #333;
-  z-index: 999;
+  z-index: 1000;
 }
-
 input{
   flex:1; height:48px; padding:0 14px; font-size:18px;
   border:1px solid #333; border-radius:12px; background:#fff; color:#000;
 }
-button{ height:48px; min-width:56px; padding:0 16px; font-size:20px;
-  border:0; border-radius:12px; background:#3a3f5c; color:#fff; }
+button{
+  height:48px; min-width:56px; padding:0 16px; font-size:20px;
+  border:0; border-radius:12px; background:#3a3f5c; color:#fff;
+}
 
-/* 飛び出すメッセージは切替バー/入力欄と被らないよう安全域を確保 */
+/* 飛び出す要素は playground 内で絶対配置 */
 .msg{
-  position:absolute; font-weight:700; font-size:22px; pointer-events:none;
+  position:absolute;
+  font-weight:700; font-size:22px;
+  pointer-events:none;
   transition: all 5s ease-out;
 }
 
-/* PC少し調整 */
-@media (min-width: 600px){
-  :root{ --bar-h:56px; --switcher-h:52px; }
+@media (min-width:600px){
+  :root{ --bar-h:56px; --switcher-h:52px; --header-h:60px; }
   .msg{ font-size:26px; }
 }
