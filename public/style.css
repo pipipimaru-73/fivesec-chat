@@ -1,76 +1,81 @@
 :root { --bar-h: 64px; }
 
-body{
-  margin:0; background:#fff; color:#000;
-  font-family: system-ui, -apple-system, sans-serif;
-  padding-bottom: var(--bar-h);
+body {
+  margin: 0;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+  background: #001a33; /* デフォルトは濃紺 */
+  padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
+  overflow: hidden;
 }
-/* ヘッダー */
+
+/* 星空テーマ専用 */
+body.starry {
+  background: radial-gradient(circle at 20% 30%, #fff 1px, transparent 2px),
+              radial-gradient(circle at 70% 80%, #fff 1px, transparent 2px),
+              radial-gradient(circle at 50% 50%, #fff 2px, transparent 3px),
+              #001a33;
+  background-size: 200px 200px;
+}
+
 header {
   padding: 16px;
   font-weight: bold;
-  font-size: 24px;   /* ← ここ追加（デフォは16pxくらい） */
-  text-align: center; /* 中央寄せにするとスマホでも映える */
+  font-size: 20px;
+  text-align: center;
 }
 
-.msg{
-  position:fixed; font-weight:700; font-size:20px;
-  pointer-events:none; transition: all 5s ease-out;
+#theme-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
 }
 
-form{
-  position:fixed; left:0; right:0; bottom:0;
-  display:flex; gap:8px; align-items:center;
-  height:var(--bar-h); padding:8px 12px;
-  background:#f5f5f5; border-top:1px solid #ddd;
-}
-input{
-  flex:1; height:48px; padding:0 14px; font-size:18px;
-  border:1px solid #ccc; border-radius:12px; background:#fff; color:#000;
-}
-button{
-  height:48px; min-width:56px; padding:0 16px;
-  font-size:20px; line-height:1; border:0; border-radius:12px;
-  background:#000; color:#fff;
-}
-
-@media (min-width:600px){
-  :root { --bar-h:56px; }
-  .msg{ font-size:24px; }
-  input{ height:44px; font-size:16px; }
-  button{ height:44px; font-size:16px; min-width:80px; }
-}
-#theme-switcher{
-  display:flex; gap:8px; padding:8px 12px;
-}
-#theme-switcher button{
-  padding:8px 12px; border:0; border-radius:999px;
-  background:#eee; font-weight:700;
-}
-#theme-switcher button:active{ transform:scale(.96); }
-/* 星空モード用に背景を暗くしたい場合 */
-body.starry {
-  background: linear-gradient(to bottom, #000011, #000033);
-  color: #fff;
-}
 #theme-switcher button {
-  margin: 4px;
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: 8px;
   border: none;
+  background: #444;
+  color: #fff;
   cursor: pointer;
 }
-/* ===== 星空テーマ ===== */
-body.starry {
-  background: linear-gradient(to bottom, #0b1d39, #000814);
+
+.msg {
+  position: fixed;
+  font-weight: 700;
+  font-size: 20px;
+  pointer-events: none;
+  transition: all 5s ease-out;
+}
+
+form {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  height: var(--bar-h);
+  padding: 8px;
+  background: rgba(0,0,0,0.7);
+  border-top: 1px solid #555;
+}
+
+input {
+  flex: 1;
+  height: 48px;
+  padding: 0 14px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: none;
+}
+
+button {
+  height: 48px;
+  min-width: 56px;
+  font-size: 20px;
+  border-radius: 12px;
+  border: none;
+  background: #0084ff;
   color: #fff;
 }
-
-body.starry header {
-  color: #ffe066; /* 見出しは星っぽい黄色 */
-}
-
-body.starry .msg {
-  text-shadow: 0 0 6px rgba(255, 255, 200, 0.8); /* きらっと光る */
-}
-
