@@ -1,4 +1,3 @@
-// ===== WebSocket 接続 =====
 const ws = new WebSocket(
   (location.protocol === "https:" ? "wss://" : "ws://") + location.host
 );
@@ -10,18 +9,21 @@ const themes = {
   star:     ["🌟","✨","🌙","🌌","⭐","💫","🌠","🪐"]
 };
 
-let currentTheme = "normal"; 
+let currentTheme = "normal";
+const playground = document.getElementById("playground");
 
-// メッセージのエフェクト
+// メッセージ表示
 function spawnMessage(text) {
   const el = document.createElement("div");
   el.className = "msg";
   el.textContent = text;
 
-  el.style.left = Math.random() * (window.innerWidth - 100) + "px";
-  el.style.top  = Math.random() * (window.innerHeight - 50) + "px";
+  const maxX = playground.offsetWidth  - 50;
+  const maxY = playground.offsetHeight - 50;
+  el.style.left = Math.random() * maxX + "px";
+  el.style.top  = Math.random() * maxY + "px";
 
-  document.body.appendChild(el);
+  playground.appendChild(el);
 
   setTimeout(() => {
     el.style.transform = "scale(0.2)";
@@ -32,31 +34,27 @@ function spawnMessage(text) {
   setTimeout(() => el.remove(), 5000);
 }
 
-// ===== 動物エモジ生成 =====
+// ランダム絵文字
 function spawnEmoji() {
   const list = themes[currentTheme];
   const emoji = list[Math.floor(Math.random() * list.length)];
   spawnMessage(emoji);
 }
 
-// ===== 常時3匹キープ =====
+// 常に3匹を維持（1匹ずつ補充）
 function maintainEmojis() {
-  const current = document.querySelectorAll(".msg").length;
+  const current = playground.querySelectorAll(".msg").length;
   if (current < 3) {
     spawnEmoji();
   }
 }
+setInterval(maintainEmojis, 1500);
 
-// 2秒ごとにチェックして不足してたら補充
-setInterval(maintainEmojis, 2000);
-
-// ===== WebSocket受信 =====
 ws.onmessage = (ev) => {
   const { t } = JSON.parse(ev.data);
   spawnMessage(t);
 };
 
-// ===== フォーム送信 =====
 const f   = document.getElementById("f");
 const inp = document.getElementById("inp");
 
@@ -77,34 +75,6 @@ f.addEventListener("submit", (e) => {
   inp.value = "";
 });
 
-// ===== テーマ切り替え =====
 function setTheme(name) {
   currentTheme = name;
-  console.log("テーマ切り替え:", name);
-}
-const playground = document.getElementById("playground");
-
-function scatterEmoji() {
-  const list = themes[currentTheme];
-  const emoji = list[Math.floor(Math.random() * list.length)];
-
-  const el = document.createElement("div");
-  el.className = "msg";
-  el.textContent = emoji;
-
-  // playground のサイズを基準に配置
-  const maxX = playground.offsetWidth  - 50;
-  const maxY = playground.offsetHeight - 50;
-  el.style.left = Math.random() * maxX + "px";
-  el.style.top  = Math.random() * maxY + "px";
-
-  playground.appendChild(el);
-
-  setTimeout(() => {
-    el.style.transform = "scale(0.2)";
-    el.style.color = "#888";
-    el.style.opacity = "0";
-  }, 100);
-
-  setTimeout(() => el.remove(), 5000);
 }
