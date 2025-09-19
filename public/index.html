@@ -2,131 +2,21 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FiveSec Chat</title>
-
-  <style>
-    /* ====== ページ全体のスタイル ====== */
-    body {
-      font-family: sans-serif; /* フォントをサンセリフに */
-      background: #fff;        /* 背景は白 */
-      color: #000;             /* デフォルト文字は黒 */
-      margin: 0;               /* 余白なし */
-    }
-
-    /* ヘッダー（必要なければ非表示でもOK） */
-    header {
-      padding: 16px;
-      font-weight: bold;
-    }
-
-    /* メッセージの見た目（ランダム位置に出す文字） */
-    .msg {
-      font-size: 24px;
-      font-weight: bold;
-      pointer-events: none;   /* クリックできないようにする */
-      transition: all 5s ease-out; /* 5秒かけて変化 */
-      position: fixed;        /* 画面内の絶対位置に配置 */
-    }
-
-    /* 入力フォームのスタイル */
-    form {
-      position: fixed;  /* 画面下に固定 */
-      bottom: 0; left: 0; right: 0;
-      display: flex;    /* 横並び配置 */
-      gap: 8px;         /* 入力欄とボタンの間隔 */
-      padding: 10px;
-      background: #f5f5f5; /* フォーム部分だけ薄いグレー */
-      border-top: 1px solid #ddd;
-    }
-
-    /* 入力欄 */
-    input {
-      flex: 1;                 /* 横幅いっぱいに広げる */
-      padding: 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      background: #fff;
-      color: #000;
-    }
-
-    /* 送信ボタン */
-    button {
-      padding: 12px 16px;
-      border-radius: 6px;
-      border: 0;
-      background: #000;  /* 黒ボタン */
-      color: #fff;       /* 白文字 */
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <!-- サイトタイトル（不要なら削除してOK） -->
   <header>FiveSec Chat - 5秒で消える投稿</header>
 
-  <!-- メッセージ一覧を置く場所（今は使わず、ランダム配置する） -->
   <div id="feed"></div>
 
-  <!-- 入力フォーム -->
   <form id="f">
-    <input id="inp" placeholder="140字まで" maxlength="140" autofocus />
-    <button>送信</button>
+    <input id="inp" placeholder="ここに入力（140字まで）" maxlength="140"
+           inputmode="text" enterkeyhint="send" />
+    <button aria-label="送信">📩</button>
   </form>
 
-  <script>
-    /* ====== WebSocket（リアルタイム通信）接続 ====== */
-    const ws = new WebSocket(
-      (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host
-    );
-
-    /* ====== サーバーからメッセージを受け取ったときの処理 ====== */
-    ws.onmessage = (ev) => {
-      const { t } = JSON.parse(ev.data); // 送られてきたテキストを取り出す
-      const el = document.createElement('div'); // 新しい要素を作る
-      el.className = 'msg';
-      el.textContent = t;
-
-      // ランダムな位置に配置
-      el.style.left = Math.random() * (window.innerWidth - 100) + "px";
-      el.style.top  = Math.random() * (window.innerHeight - 50) + "px";
-
-      // 画面に追加
-      document.body.appendChild(el);
-
-      // 少し待ってから小さく＆グレー化＆透明化
-      setTimeout(() => {
-        el.style.transform = "scale(0.2)"; // 小さくする
-        el.style.color = "#888";           // グレーに変える
-        el.style.opacity = "0";            // 透明にする
-      }, 100);
-
-      // 5秒後に削除（DOMから消す）
-      setTimeout(() => el.remove(), 5000);
-    };
-
-    /* ====== フォーム送信処理 ====== */
-    const f = document.getElementById('f');
-    const inp = document.getElementById('inp');
-
-    f.addEventListener('submit', (e) => {
-      e.preventDefault(); // ページリロードを防ぐ
-      const text = inp.value.trim(); // 入力内容を取得（前後の空白削除）
-      if (!text) return; // 空欄なら無視
-
-      try {
-        // WebSocketでサーバーに送信
-        ws.send(JSON.stringify({ text }));
-      } catch {
-        // WebSocketが失敗したらHTTP経由で送る（保険）
-        fetch('/api/post', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ text })
-        });
-      }
-
-      inp.value = ''; // 入力欄をクリア
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
