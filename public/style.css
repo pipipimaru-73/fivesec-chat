@@ -85,3 +85,40 @@ button {
   input { height: 44px; font-size: 16px; }
   button { height: 44px; font-size: 16px; min-width: 80px; }
 }
+/* ▼ テーマ切り替えボタンエリア */
+#theme-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  background: #f0f0f0;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+#theme-switcher button {
+  flex: 1;
+  max-width: 90px;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+/* 遊び場エリア */
+#playground {
+  position: relative;
+  flex: 1;
+  height: calc(100vh - 160px); /* ヘッダー + 切替 + 入力フォーム分を除く */
+  overflow: hidden;
+  background: #fff; /* デフォ背景 */
+}
+
+.msg {
+  position: absolute; /* playground内で配置 */
+  font-weight: 700;
+  font-size: 20px;
+  pointer-events: none;
+  transition: all 5s ease-out;
+}
+

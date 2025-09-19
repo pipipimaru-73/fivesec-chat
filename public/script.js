@@ -3,27 +3,23 @@ const ws = new WebSocket(
   (location.protocol === "https:" ? "wss://" : "ws://") + location.host
 );
 
-// テーマごとの絵文字セット
 const themes = {
-  normal: ["🐶","🐱","🐰","🐻","🐼","🐵","🐸","🐧","🐤","🦊"],
+  normal:   ["🐶","🐱","🐰","🐻","🐼","🐵","🐸","🐧","🐤","🦊"],
   aquarium: ["🐠","🐟","🐡","🦈","🐬","🐳","🐋","🦑","🐙","🦐"],
-  jungle: ["🦁","🐯","🐵","🦜","🐍","🐘","🦧","🦒","🦓","🦩"],
-  starry: ["⭐","🌟","✨","🌌","🌠","🌙","🪐","☄️"]
+  jungle:   ["🦁","🐯","🐵","🦜","🐍","🐘","🦧","🦒","🦓","🦩"],
+  star:     ["🌟","✨","🌙","🌌","⭐","💫","🌠","🪐"]
 };
 
-let currentTheme = "normal"; // デフォルト
+let currentTheme = "normal"; 
 
-// ランダムに絵文字を配置
-function scatterEmoji() {
-  const list = themes[currentTheme];
-  const emoji = list[Math.floor(Math.random() * list.length)];
-
+// メッセージのエフェクト
+function spawnMessage(text) {
   const el = document.createElement("div");
   el.className = "msg";
-  el.textContent = emoji;
+  el.textContent = text;
 
   el.style.left = Math.random() * (window.innerWidth - 100) + "px";
-  el.style.top  = Math.random() * (window.innerHeight - 100) + "px";
+  el.style.top  = Math.random() * (window.innerHeight - 50) + "px";
 
   document.body.appendChild(el);
 
@@ -36,33 +32,31 @@ function scatterEmoji() {
   setTimeout(() => el.remove(), 5000);
 }
 
-// 常に3〜4個は画面に散らばるようにする
-setInterval(() => {
-  for (let i = 0; i < 3; i++) scatterEmoji();
-}, 4000);
+// ===== 動物エモジ生成 =====
+function spawnEmoji() {
+  const list = themes[currentTheme];
+  const emoji = list[Math.floor(Math.random() * list.length)];
+  spawnMessage(emoji);
+}
 
-// WebSocket受信
+// ===== 常時3匹キープ =====
+function maintainEmojis() {
+  const current = document.querySelectorAll(".msg").length;
+  if (current < 3) {
+    spawnEmoji();
+  }
+}
+
+// 2秒ごとにチェックして不足してたら補充
+setInterval(maintainEmojis, 2000);
+
+// ===== WebSocket受信 =====
 ws.onmessage = (ev) => {
   const { t } = JSON.parse(ev.data);
-  const el = document.createElement("div");
-  el.className = "msg";
-  el.textContent = t;
-
-  el.style.left = Math.random() * (window.innerWidth - 100) + "px";
-  el.style.top  = Math.random() * (window.innerHeight - 100) + "px";
-
-  document.body.appendChild(el);
-
-  setTimeout(() => {
-    el.style.transform = "scale(0.2)";
-    el.style.color = "#888";
-    el.style.opacity = "0";
-  }, 100);
-
-  setTimeout(() => el.remove(), 5000);
+  spawnMessage(t);
 };
 
-// 送信処理
+// ===== フォーム送信 =====
 const f   = document.getElementById("f");
 const inp = document.getElementById("inp");
 
@@ -83,8 +77,34 @@ f.addEventListener("submit", (e) => {
   inp.value = "";
 });
 
-// テーマ切り替え
+// ===== テーマ切り替え =====
 function setTheme(name) {
   currentTheme = name;
   console.log("テーマ切り替え:", name);
+}
+const playground = document.getElementById("playground");
+
+function scatterEmoji() {
+  const list = themes[currentTheme];
+  const emoji = list[Math.floor(Math.random() * list.length)];
+
+  const el = document.createElement("div");
+  el.className = "msg";
+  el.textContent = emoji;
+
+  // playground のサイズを基準に配置
+  const maxX = playground.offsetWidth  - 50;
+  const maxY = playground.offsetHeight - 50;
+  el.style.left = Math.random() * maxX + "px";
+  el.style.top  = Math.random() * maxY + "px";
+
+  playground.appendChild(el);
+
+  setTimeout(() => {
+    el.style.transform = "scale(0.2)";
+    el.style.color = "#888";
+    el.style.opacity = "0";
+  }, 100);
+
+  setTimeout(() => el.remove(), 5000);
 }
